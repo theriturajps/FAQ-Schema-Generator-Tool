@@ -1,0 +1,112 @@
+<style>
+#add-faq,.faq-Btn[type=submit]{background-color:#056aff;color:#fff;padding:10px 20px;cursor:pointer;display:block;margin-right:auto;margin-left:auto;transition:background-color .3s}
+.faq-input .faq-label{display:block;font-weight:700;margin-bottom:5px}
+input[type=text],textarea{width:100%;padding:8px;border:1px solid #ccc;background-color:rgba(0,0,0,0);color:var(--post-title-color);border-radius:4px;resize:vertical;margin-bottom:10px;box-shadow:3px 3px 0 0 #056aff}
+#add-faq{margin-bottom:10px;border:none;border-radius:4px}
+#add-faq:hover,.faq-Btn[type=submit]:hover{background-color:#3e8e41}
+.faq-Btn[type=submit]{border:none;border-radius:4px}
+#schema-output{margin-top:20px}
+</style>
+
+<p>FAQ pages are great assets to your website. However, adding FAQ schema code to the page can be painful Our easy-to-use <b>online FAQ Schema Generator Tool</b> gene rator tool allows you to create and generate code for your website. Just paste in your FAQs, and all belonging schema code is generated in seconds.</p>
+<h2>Free FAQ Schema Generator Tool</h2>
+<p>Our tool is free and simple to use. It helps you to add structured data to your web content, a process that will heighten its visibility in search engine results and <a class="external" href="https://www.riturajps.in/2024/01/the-ultimate-beginners-guide-to-seo.html">improve its overall SEO</a>. Try it out now and get your site doing better in search engines than ever before!</p>
+<form id="faq-form">
+    <div class="faq-input">
+        <label class="faq-label">Question:</label>
+        <input id="question-1" name="question[]" required="" placeholder="Enter Your Question" type="text" />
+        <label class="faq-label">Answer:</label>
+        <textarea id="answer-1" name="answer[]" required="" placeholder="Enter Your Answer" rows="5"></textarea>
+    </div>
+    <button class="faq-Btn" id="add-faq" type="button">Add New</button>
+    <button class="faq-Btn" type="submit">Generate Schema</button>
+</form>
+<div id="schema-output"><!--The generated schema code will be displayed here--></div>
+
+<h2>How to Use Our Free FAQ Schema Generator Tool?</h2>
+<ol class="step noList">
+    <li><b>Step 1 :-</b> Enter the <b>Question</b> and <b>Answer</b> in the uppermost FAQ section on the form.</li>
+    <li><b>Step 2 :-</b> If you would like to include more FAQ sections, please click on the "<code>Add New</code>" Button.</li>
+    <li><b>Step 3 :-</b> When you have listed all your FAQ divisions, click "<code>Generate Schema</code>" button.</li>
+    <li><b>Step 4 :-</b> Our system will have created schema codes of the new FAQs that appear in a selection offered at bottom this page. You can <b>copy to clipboard</b> or you can <b>download the schema</b> direct in your device.</li>
+    <li><b>Step 5 :-</b> Put the schema code generated into your web page(s) in appropriate areas. The HTML code of the page itself may be directly added, or a plugin or script that enables adding structured data like this can be used similarly.</li>
+    <li><b>Step 6 :-</b> You can Use the <a class="external" href="https://search.google.com/test/rich-results">Google Rich Result Test Tool</a> to Try it out and See If Your FAQ Schema Works without errors.</li>    
+</ol>
+
+<script>// Get the form element and the schema output element
+const faqForm = document.querySelector('#faq-form');
+const schemaOutput = document.querySelector('#schema-output');
+
+// Add an event listener for the form submit event
+faqForm.addEventListener('submit', generateSchema);
+
+// Add an event listener for the Add New button click event
+const addFaqBtn = document.querySelector('#add-faq');
+addFaqBtn.addEventListener('click', addFaqInput);
+
+// Create a function to add new FAQ input fields
+function addFaqInput() {
+	// Get the last FAQ input div and its ID number
+	const lastFaqInput = document.querySelector('.faq-input:last-of-type');
+	const lastFaqInputId = lastFaqInput.getAttribute('data-faq-id');
+	// Create a new FAQ input div with an incremented ID number
+	const newFaqInput = document.createElement('div');
+	newFaqInput.setAttribute('class', 'faq-input');
+	newFaqInput.setAttribute('data-faq-id', parseInt(lastFaqInputId) + 1);
+	newFaqInput.innerHTML = `
+        <label class="faq-label" for="question-${parseInt(lastFaqInputId) + 1}">Question:</label>
+        <input type="text" id="question-${parseInt(lastFaqInputId) + 1}" placeholder="Enter Your Question" name="question[]" required>
+        <label class="faq-label" for="answer-${parseInt(lastFaqInputId) + 1}">Answer:</label>
+        <textarea id="answer-${parseInt(lastFaqInputId) + 1}" name="answer[]" placeholder="Enter Your Answer" rows="5" required></textarea>
+      `;
+	// Append the new FAQ input div to the form
+	faqForm.insertBefore(newFaqInput, addFaqBtn);
+}
+
+// Create a function to generate the FAQ schema
+function generateSchema(event) {
+	event.preventDefault();
+
+	// Get the input elements for the questions and answers
+	const questionInputs = document.getElementsByName('question[]');
+	const answerInputs = document.getElementsByName('answer[]');
+
+	// Create an array of FAQ objects from the input values
+	const faqArray = [];
+	for (let i = 0; i < questionInputs.length; i++) {
+		const question = questionInputs[i].value.trim();
+		const answer = answerInputs[i].value.trim();
+		if (question !== '' && answer !== '') {
+			faqArray.push({
+				'@type': 'Question',
+				'name': question,
+				'acceptedAnswer': {
+					'@type': 'Answer',
+					'text': answer
+				}
+			});
+		}
+	}
+
+	// Create the FAQ schema code from the array of objects
+	const schemaCode = `&lt;script type="application/ld+json"&gt;{
+"@context": "https://schema.org",
+"@type": "FAQPage",
+"mainEntity": [
+  ${faqArray.map(faq => JSON.stringify(faq)).join(',\n')}
+]
+}&lt;/script&gt;`;
+
+	schemaOutput.innerHTML = `<div class="cBox">
+    <div class="cBoxH"><span>FAQ Json Code</span>
+        <div class="bTnC">
+            <button class="cBoxB" id="copy1" onclick='copyC("copy1","faq-schema")'><i class="icn"></i></button>
+            <button class="cBoxB" id="download1" onclick='downD("faq-schema", "faq-schema")'><i class="idn"></i></button>
+        </div>
+    </div>
+    <div id="faq-schema">
+        <pre>${schemaCode}</pre>
+    </div>
+</div>`;
+}
+</script>
